@@ -30,7 +30,7 @@ st.write(df)
 medcost = pd.read_csv("https://raw.githubusercontent.com/afiqahrupawon/myownweb/main/insurance.csv")
 medcost['smoker'] = medcost['smoker'].map({'yes': 1, 'no': 0})
 X = medcost[['age','bmi','smoker']]
-Y = medcost.target
+Y = medcost.charges
 
 
 
@@ -43,5 +43,5 @@ y_pred=model.predict(x_test)
 prediction = model.predict(df)
 
 st.subheader('Prediction')
-st.write(medcost.target_names[prediction])
+st.write(medcost.charges_names[prediction])
 #st.write(prediction)
