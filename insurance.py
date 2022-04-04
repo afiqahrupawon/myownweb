@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -26,12 +27,11 @@ df = user_input_features()
 st.subheader('User Input parameters')
 st.write(df)
 
-medcost = datasets.load_medcost("https://raw.githubusercontent.com/afiqahrupawon/myownweb/main/insurance.csv")
-X = medcost.data
+medcost = pd.read_csv("https://raw.githubusercontent.com/afiqahrupawon/myownweb/main/insurance.csv")
+medcost['smoker'] = medcost['smoker'].map({'yes': 1, 'no': 0})
+X = medcost[['age','bmi','smoker']]
 Y = medcost.target
 
-
-linearRegression.fit(X, Y)
 
 
 x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size =0.30,random_state=1)
