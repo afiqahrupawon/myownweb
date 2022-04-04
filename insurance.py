@@ -28,20 +28,21 @@ st.subheader('User Input parameters')
 st.write(df)
 
 medcost = pd.read_csv("https://raw.githubusercontent.com/afiqahrupawon/myownweb/main/insurance.csv")
-medcost['smoker'] = medcost['smoker'].map({'yes': 1, 'no': 0})
+smoker = {'no': 0,'yes': 1}
+medcost.smoker = [smoker[item] for item in medcost.smoker] 
 X = medcost[['age','bmi','smoker']]
 Y = medcost.charges
 
 
 
-x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size =0.30,random_state=1)
+x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size =0.30,random_state=0)
 #building the model
 model = LinearRegression()
 model.fit(x_train,y_train)
-y_pred=model.predict(x_test)
+y_pred = model.predict(x_test)
 
-prediction = model.predict(df)
 
-st.subheader('Prediction')
-st.write(medcost.charges_names[prediction])
-#st.write(prediction)
+if st.button('Predict'):           # when the submit button is pressed
+    prediction = model.predict(df)
+    st.balloons()
+    st.success(f'Your insurance charges would be: ${round(prediction[0],2)}')
