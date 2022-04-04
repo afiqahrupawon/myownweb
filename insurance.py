@@ -10,6 +10,12 @@ st.write("""
 This app predicts the medical cost or insurance charges according to your attributes.
 """)
 
+def user_input_features():
+    df = pd.DataFrame({'smoker': ['Yes', 'No']}) 
+    return df
+df = user_input_features()
+
+
 st.sidebar.header('User Input Parameters')
 
 def user_input_features():
@@ -22,18 +28,23 @@ def user_input_features():
     features = pd.DataFrame(data, index=[0])
     return features
 
+if smoker == 'yes':
+    smoke = 1
+else:
+    smoke = 0
+
 df = user_input_features()
 
 st.subheader('User Input parameters')
 st.write(df)
 
 medcost = pd.read_csv("https://raw.githubusercontent.com/afiqahrupawon/myownweb/main/insurance.csv")
-smoker = {'no': 0,'yes': 1}
-medcost.smoker = [smoker[item] for item in medcost.smoker] 
+#smoker = {'no': 0,'yes': 1}
+#medcost.smoker = [smoker[item] for item in medcost.smoker] 
 X = medcost[['age','bmi','smoker']]
 Y = medcost.charges
 
-
+features = [smoke, age, bmi]
 
 x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size =0.30,random_state=0)
 #building the model
@@ -41,8 +52,11 @@ model = LinearRegression()
 model.fit(x_train,y_train)
 y_pred = model.predict(x_test)
 
+int_features = [int(x) for x in features]
+final_features = [np.array(int_features)]
+
 
 if st.button('Predict'):           # when the submit button is pressed
-    prediction = model.predict(df)
+    prediction = model.predict(final_features)
     st.balloons()
     st.success(f'Your insurance charges would be: ${round(prediction[0],2)}')
