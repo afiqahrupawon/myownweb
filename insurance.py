@@ -1,12 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-
 import pickle
-
 
 
 # load the model from disk
@@ -15,7 +10,7 @@ loaded_model = pickle.load(open('model_pkl', 'rb'))
 
 
 # Titles 
-st.title("Medical cost (Insurance) Charges Prediction App")
+st.title("Medical Cost (Insurance) Charges Prediction App")
 st.header("This app will calculate the (insurance) charges based on a person's attributes")
 
 readme = st.checkbox("readme first")
@@ -33,55 +28,22 @@ if readme:
 
 
 
-def load_data():
-    df = pd.DataFrame({'sex': ['Male','Female'],
-                       'smoker': ['Yes', 'No']}) 
-    return df
-df = load_data()
-
-
-
-def load_data():
-    df1 = pd.DataFrame({'region' : ['southeast' ,'northwest' ,'southwest' ,'northeast']}) 
-    return df1
-df1 = load_data()
-
-
 
 # Take the users input
 
-sex = st.selectbox("Please select your gender", df['sex'].unique())
-smoker = st.selectbox("Are you a smoker?", df['smoker'].unique())
-region = st.selectbox("Please select your region", df1['region'].unique())
 age = st.slider("Your age", 18, 100)
+sex = st.slider("Please select your gender [0 is for 'Male', 1 is for 'Female']", 0, 1) 
 bmi = st.slider("Your BMI", 10, 50)
 children = st.slider("Number of children", 0, 15)
+smoker = st.selectbox("Please select if you are a smoker or not [0 is for 'No', 1 is for 'Yes']", 0, 1)
+region = st.selectbox("Please select your region [0 is for 'southwest', 1 is for 'southeast', 2 is for'northwest', 1 is for 'northeast' ]", 0, 3)
 
-# converting text input to numeric to get back predictions from backend model.
-if sex == 'male':
-    gender = 0
-else:
-    gender = 1
-    
-if smoker == 'yes':
-    smoke = 1
-else:
-    smoke = 0
-    
-if region == 'northeast':
-    reg = 3
-elif region == 'northwest':
-    reg = 2
-elif region == 'southeast':
-    reg = 1
-else:
-    reg = 0
     
 
 # store the inputs
-features = [gender, smoke, reg, age, bmi, children]
-# convert user inputs into an array fr the model
+features = [age, sex, bmi, children, , smoker, region]
 
+# convert user inputs into an array fr the model
 int_features = [int(x) for x in features]
 final_features = [np.array(int_features)]
 
